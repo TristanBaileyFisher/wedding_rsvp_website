@@ -1,8 +1,11 @@
 
 'use client';
 
+
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
+import Silk from '../Components/silk';
+
 
 type Guest = {
     id: number;
@@ -21,6 +24,7 @@ export default function Rsvp() {
     const [requirements, setRequirements] = useState<Record<number, {
         dietary: string;
         accessibility: string;
+        songChoice: string;
     }>>({});
     const [attendance, setAttendance] = useState<boolean | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -104,7 +108,7 @@ export default function Rsvp() {
                 Object.fromEntries(
                     data.map((selectedGuest: Guest) => [
                         selectedGuest.id,
-                        { dietary: '', accessibility: '' },
+                        { dietary: '', accessibility: '', songChoice: '' },
                     ]),
                 ),
             );
@@ -150,6 +154,8 @@ export default function Rsvp() {
                         requirements[guest.id]?.dietary.trim() || null,
                     accessibility_requirements:
                         requirements[guest.id]?.accessibility.trim() || null,
+                    spotify_choice:
+                        requirements[guest.id]?.songChoice.trim() || null,
                 })),
             });
 
@@ -169,26 +175,33 @@ export default function Rsvp() {
         }
     };
     return (
-        <section id='section-rsvp' className="relative">
-            <img src="Images/greenSilk.jpg" alt="" className="absolute inset-0 w-full h-full object-cover -z-10 brightness-50" />
+        <section
+            id="section-rsvp"
+            className="relative bg-deep-forest px-4 pt-28 pb-16 md:pt-36 md:pb-24"
+        >
+            <div
+                className="pointer-events-none absolute inset-x-0 -top-48 bottom-0 z-0 bg-cover bg-center"
+                style={{
+                    backgroundImage: "url('/Images/greenSilk.jpg')",
+                    maskImage: 'linear-gradient(to bottom, transparent 0, black 12rem)',
+                    WebkitMaskImage: 'linear-gradient(to bottom, transparent 0, black 12rem)',
+                }}
+                aria-hidden="true"
+            />
+            <div className="relative z-10 mx-auto w-full max-w-xl">
+                <div className="relative rounded-3xl  p-8 text-center font-antic text-warm-ivory  md:p-12">
 
-            <div className="relative w-124  mx-auto h-auto  overflow-hidden">
-
-
-
-                <div className="text-center font-antic relative   mx-auto h-auto overflow-hidden p-20 m-20 bg-sage-green">
-
-                    <div className="flex flex-col gap-6 w-full">
+                    <div className="flex flex-col gap-6 w-full text-warm-ivory">
 
                         {/* RSVP Heading */}
-                        <div className="text-8xl text-center text-deep-forest">
+                        <div className="text-center text-8xl">
                             <h1>RS</h1>
                             <h1>VP</h1>
                         </div>
 
                         <img
                             src="/svg/first_decoration_dark.svg"
-                            className="w-24 h-auto mx-auto text-deep-forest"
+                            className="mx-auto h-auto w-24 brightness-0 invert"
                             alt=""
                         />
 
@@ -242,12 +255,12 @@ export default function Rsvp() {
                                         }
                                         placeholder="Start typing your name..."
                                         autoComplete="off"
-                                        className="uppercase text-center p-4 rounded-full bg-[#AFD0C1] focus:outline-none focus:ring-2 focus:ring-deep-forest/20 hover:bg-[#D5EEE3] ease-in-out duration-300"
+                                        className="text-deeper-forest placeholder:text-deeper-forest/80 uppercase text-center p-4 rounded-full bg-[#AFD0C1] focus:outline-none focus:ring-2 focus:ring-deep-forest/20 hover:bg-[#D5EEE3] ease-in-out duration-300"
                                     />
 
                                     {/* Search Results */}
                                     {searchTerm && (
-                                        <div className="rounded-3xl overflow-hidden bg-[#D5EEE3] shadow-sm">
+                                        <div className=" text-deeper-forest rounded-3xl overflow-hidden bg-[#D5EEE3] shadow-sm">
 
                                             {searchTerm.trim().length < 3 ? (
                                                 <div className="px-6 py-5 text-sm opacity-70">
@@ -297,7 +310,7 @@ export default function Rsvp() {
                                             Invitation Found
                                         </p>
 
-                                        <div className="bg-[#D5EEE3] rounded-3xl p-6">
+                                        <div className="rounded-3xl bg-[#D5EEE3] p-6 text-deep-forest">
 
                                             <p className="text-2xl whitespace-pre-line">
                                                 {selectedGuests
@@ -346,7 +359,7 @@ export default function Rsvp() {
 
                                         <div className="flex flex-col gap-3">
 
-                                            <label className="flex items-center accent-deep-forest gap-3 bg-[#D5EEE3] p-4 rounded-full cursor-pointer hover:bg-[#AFD0C1] transition-colors">
+                                            <label className="flex items-center gap-3 rounded-full bg-[#D5EEE3] p-4 text-deep-forest accent-deep-forest cursor-pointer transition-colors hover:bg-[#AFD0C1]">
                                                 <input
                                                     type="radio"
                                                     name="attendance"
@@ -363,7 +376,7 @@ export default function Rsvp() {
                                                 </span>
                                             </label>
 
-                                            <label className="flex items-center accent-deep-forest gap-3 bg-[#D5EEE3] p-4 rounded-full cursor-pointer hover:bg-[#AFD0C1] transition-colors">
+                                            <label className="flex items-center gap-3 rounded-full bg-[#D5EEE3] p-4 text-deep-forest accent-deep-forest cursor-pointer transition-colors hover:bg-[#AFD0C1]">
                                                 <input
                                                     type="radio"
                                                     name="attendance"
@@ -394,6 +407,7 @@ export default function Rsvp() {
                                                     requirements[guest.id] ?? {
                                                         dietary: '',
                                                         accessibility: '',
+                                                        songChoice: '',
                                                     };
 
                                                 return (
@@ -427,7 +441,7 @@ export default function Rsvp() {
                                                             }
                                                             placeholder="None, or tell us about any dietary requirements"
                                                             rows={3}
-                                                            className="rounded-3xl bg-[#D5EEE3] p-4 text-text focus:outline-none focus:ring-2 focus:ring-deep-forest/20"
+                                                            className="rounded-3xl bg-[#D5EEE3] p-4 text-deeper-forest placeholder:text-deeper-forest/80 focus:outline-none focus:ring-2 focus:ring-deep-forest/20"
                                                         />
 
                                                         <label
@@ -451,7 +465,33 @@ export default function Rsvp() {
                                                             }
                                                             placeholder="None, or tell us how we can make the day accessible for you"
                                                             rows={3}
-                                                            className="rounded-3xl bg-[#D5EEE3] p-4 text-text focus:outline-none focus:ring-2 focus:ring-deep-forest/20"
+                                                            className="rounded-3xl bg-[#D5EEE3] p-4 text-deeper-forest placeholder:text-deeper-forest/80 focus:outline-none focus:ring-2 focus:ring-deep-forest/20"
+                                                        />
+                                                        <label
+                                                            htmlFor={`songChoice-${guest.id}`}
+                                                            className="text-lg"
+                                                        >
+                                                            Song request
+                                                        </label>
+                                                        <p className="text-sm opacity-80">
+                                                            We’d love to hear which songs you’d enjoy on the day. We’ll take your suggestions into account as we put together the final playlist.
+                                                        </p>
+                                                        <textarea
+                                                            id={`songChoice-${guest.id}`}
+                                                            value={guestRequirements.songChoice}
+                                                            onChange={(event) =>
+                                                                setRequirements((current) => ({
+                                                                    ...current,
+                                                                    [guest.id]: {
+                                                                        ...guestRequirements,
+                                                                        songChoice:
+                                                                            event.target.value,
+                                                                    },
+                                                                }))
+                                                            }
+                                                            placeholder="Song title and artist (optional)"
+                                                            rows={3}
+                                                            className="rounded-3xl bg-[#D5EEE3] p-4 text-deeper-forest placeholder:text-deeper-forest/80 focus:outline-none focus:ring-2 focus:ring-deep-forest/20"
                                                         />
                                                     </fieldset>
                                                 );

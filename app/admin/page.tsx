@@ -15,6 +15,7 @@ type RsvpRow = {
   attending: boolean | null;
   dietary_requirements: string | null;
   accessibility_requirements: string | null;
+  spotify_choice: string | null;
   submitted_at: string | null;
 };
 
@@ -518,7 +519,7 @@ export default function AdminPage() {
             <p className="mt-5 text-[#5c6863]">No guests have been added yet.</p>
           ) : (
             <div className="mt-5 overflow-x-auto">
-              <table className="w-full min-w-[760px] border-collapse text-left text-sm">
+              <table className="w-full min-w-[900px] border-collapse text-left text-sm">
                 <thead>
                   <tr className="border-b border-[#e8ded0] text-[#5c6863]">
                     <th className="p-3">Guest</th>
@@ -526,6 +527,7 @@ export default function AdminPage() {
                     <th className="p-3">Attendance</th>
                     <th className="p-3">Dietary</th>
                     <th className="p-3">Accessibility</th>
+                    <th className="p-3">Song request</th>
                     <th className="p-3">Submitted</th>
                     <th className="p-3">Actions</th>
                   </tr>
@@ -555,6 +557,9 @@ export default function AdminPage() {
                       </td>
                       <td className="whitespace-pre-wrap p-3">
                         {row.accessibility_requirements || '—'}
+                      </td>
+                      <td className="whitespace-pre-wrap p-3">
+                        {row.spotify_choice || '—'}
                       </td>
                       <td className="p-3">
                         {row.submitted_at
